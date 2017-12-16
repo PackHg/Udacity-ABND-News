@@ -70,6 +70,7 @@ public final class TheGuardian {
         final String RESULTS = "results";
         final String PUBLICATION_DATE = "webPublicationDate";
         final String TITLE = "webTitle";
+        final String SECTION_NAME = "sectionName";
         final String URL = "webUrl";
         final String FIELDS = "fields";
         final String THUMBNAIL_URL = "thumbnail";
@@ -84,6 +85,7 @@ public final class TheGuardian {
             for (int i = 0; i < results.length(); i++) {
                 String date = results.getJSONObject(i).getString(PUBLICATION_DATE);
                 String title = results.getJSONObject(i).getString(TITLE);
+                String section = results.getJSONObject(i).getString(SECTION_NAME);
                 String url = results.getJSONObject(i).getString(URL);
 
                 JSONObject fields;
@@ -105,8 +107,7 @@ public final class TheGuardian {
                 }
 
                 // TODO: to update.
-                newsArrayList.add(new News(title, date, url,
-                        thumbnailUrl, thumbnailImage, "Technology"));
+                newsArrayList.add(new News(title, date, url, thumbnailImage, section));
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem in parsing the JSON string", e);

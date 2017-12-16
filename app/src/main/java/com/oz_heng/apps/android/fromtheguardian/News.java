@@ -9,19 +9,16 @@ public class News {
     private String title;
     private String date;
     private String url;
-    // TODO: is thumbnailUrl required? i.e. useless once the Bitmap has been saved.
-    private String thumbnailUrl;
     private Bitmap thumbnailImage;
-    private String category;
+    private String section;
 
-    public News(String title, String date, String url,
-                String thumbnailUrl, Bitmap thumbnailImage, String category) {
+    public News(String title, String date, String url, Bitmap thumbnailImage,
+                String section) {
         this.title = title;
         this.date = date;
         this.url = url;
-        this.thumbnailUrl = thumbnailUrl;
         this.thumbnailImage = thumbnailImage;
-        this.category = category;
+        this.section = section;
     }
 
     public String getTitle() {
@@ -36,15 +33,11 @@ public class News {
         return url;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
     public Bitmap getThumbnailBitmap() {
         return thumbnailImage;
     }
 
-    public String getCategory() {
-        return category;
+    public String getSection() {
+        return section;
     }
 }
