@@ -21,7 +21,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.oz_heng.apps.android.fromtheguardian.Utils.DateAndTime.addDaysToCurrentDate;
 import static com.oz_heng.apps.android.fromtheguardian.Utils.FetchRemoteData.isNetworkConnected;
 import static com.oz_heng.apps.android.fromtheguardian.Utils.Helper.showSnackBar;
 
@@ -31,6 +30,16 @@ public class MainActivity extends AppCompatActivity
 
     /** Base URL for querying The Guardian API */
     private static final String THE_GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?";
+
+    /** Keys for querying news sections of the Guardian API  */
+    private static final String SECTION_WORLD = "world";
+    private static final String SECTION_AUSTRALIA = "australia-news";
+    private static final String SECTION_TECHNOLOGY = "technology";
+    private static final String SECTION_SCIENCE = "science";
+    private static final String SECTION_SPORT = "sport";
+
+    /** current news section */
+    private String section = SECTION_WORLD;
 
     /** Constant value for the news loader ID */
     private static final int NEWS_LOADER_ID = 1;
@@ -90,15 +99,34 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+//        if (isNetworkConnected(MainActivity.this)) {
+//            progressBar.setVisibility(View.VISIBLE);
+//            LoaderManager loaderManager = getLoaderManager();
+//            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
+//        } else {
+//            progressBar.setVisibility(View.GONE);
+//            showSnackBar(coordinatorLayout, "No Internet connection.");
+//        }
+        loadNewsData();
+    }
+
+    /**
+     * Get a loader to load news data.
+     */
+    private void loadNewsData() {
         if (isNetworkConnected(MainActivity.this)) {
             progressBar.setVisibility(View.VISIBLE);
+
             LoaderManager loaderManager = getLoaderManager();
-            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
+            if (loaderManager.getLoader(NEWS_LOADER_ID) == null) {
+                loaderManager.initLoader(NEWS_LOADER_ID, null, this);
+            } else {
+                loaderManager.restartLoader(NEWS_LOADER_ID, null, this);
+            }
         } else {
             progressBar.setVisibility(View.GONE);
             showSnackBar(coordinatorLayout, "No Internet connection.");
         }
-
     }
 
     @Override
@@ -136,25 +164,33 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_world) {
+            section = SECTION_WORLD;
+        } else if (id == R.id.nav_australia) {
+            section = SECTION_AUSTRALIA;
+        } else if (id == R.id.nav_technology) {
+            section = SECTION_TECHNOLOGY;
+        } else if (id == R.id.nav_science) {
+            section = SECTION_SCIENCE;
+        } else if (id == R.id.nav_sport) {
+            section = SECTION_SPORT;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+//        progressBar.setVisibility(View.VISIBLE);
+//        if (isNetworkConnected(MainActivity.this)) {
+//            progressBar.setVisibility(View.VISIBLE);
+//            LoaderManager loaderManager = getLoaderManager();
+//            loaderManager.restartLoader(NEWS_LOADER_ID, null, this);
+//        } else {
+//            progressBar.setVisibility(View.GONE);
+//            showSnackBar(coordinatorLayout, "No Internet connection.");
+//        }
+        loadNewsData();
         return true;
     }
 
@@ -170,13 +206,13 @@ public class MainActivity extends AppCompatActivity
         Uri baseUri = Uri.parse(THE_GUARDIAN_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        uriBuilder.appendQueryParameter("section", "technology");
+        uriBuilder.appendQueryParameter("section", section);
         uriBuilder.appendQueryParameter("format", "json");
         uriBuilder.appendQueryParameter("order-by", "newest");
 
         // Set the value for "from-date" to last week (today - 7 days) by detault.
-        String pastDate = addDaysToCurrentDate(DAYS);
-        uriBuilder.appendQueryParameter("from-date", pastDate);
+//        String pastDate = addDaysToCurrentDate(DAYS);
+//        uriBuilder.appendQueryParameter("from-date", pastDate);
 
         uriBuilder.appendQueryParameter("page-size", "10");
         uriBuilder.appendQueryParameter("show-fields", "thumbnail");
