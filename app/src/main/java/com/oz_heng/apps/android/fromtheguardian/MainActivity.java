@@ -3,8 +3,10 @@ package com.oz_heng.apps.android.fromtheguardian;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -43,6 +45,12 @@ public class MainActivity extends AppCompatActivity
 
     /** Constant value for the news loader ID */
     private static final int NEWS_LOADER_ID = 1;
+
+    /** Tag used to save user data in SharedPreferences */
+    private static final String USER_DATA = "com.oz_heng.apps.android.fromtheguardian.user_data";
+    /** Key for saving the chosen news section */
+    private static final String KEY_USER_SECTION = "user section";
+
 
     private List<News> newsList = new ArrayList<News>();
     private ListView listView;
@@ -99,15 +107,26 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-//        if (isNetworkConnected(MainActivity.this)) {
-//            progressBar.setVisibility(View.VISIBLE);
-//            LoaderManager loaderManager = getLoaderManager();
-//            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
-//        } else {
-//            progressBar.setVisibility(View.GONE);
-//            showSnackBar(coordinatorLayout, "No Internet connection.");
-//        }
+        // Restore section from SharedPreferences.
+        SharedPreferences sp = getSharedPreferences(USER_DATA, 0);
+        if (sp != null) {
+            section = sp.getString(KEY_USER_SECTION, section);
+        }
+
+        // TODO: checked the corresponding nav section item.
+
         loadNewsData();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Save section in SharedPreferences.
+        SharedPreferences sp = getSharedPreferences(USER_DATA, 0);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(KEY_USER_SECTION, section);
+        editor.apply();
     }
 
     /**
@@ -154,7 +173,14 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_refresh) {
+            showSnackBar(coordinatorLayout, "Refresh");
+            loadNewsData();
+            return true;
+        }
         if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
             return true;
         }
 
@@ -181,15 +207,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-//        progressBar.setVisibility(View.VISIBLE);
-//        if (isNetworkConnected(MainActivity.this)) {
-//            progressBar.setVisibility(View.VISIBLE);
-//            LoaderManager loaderManager = getLoaderManager();
-//            loaderManager.restartLoader(NEWS_LOADER_ID, null, this);
-//        } else {
-//            progressBar.setVisibility(View.GONE);
-//            showSnackBar(coordinatorLayout, "No Internet connection.");
-//        }
         loadNewsData();
         return true;
     }
@@ -197,11 +214,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
 
-        /* Number of days to add to today. Used for setting the value associated to the
-         * key "from-date" when fetching data from The Guardian. By default set to -7
-         * for last week. */
-        final int DAYS = -7;
-
+        //Get the number of results per query from SharedPreferences.
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String maxResults = sp.getString(getString(R.string.settings_max_results_key),
+                getString(R.string.settings_max_results_default));
 
         Uri baseUri = Uri.parse(THE_GUARDIAN_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
@@ -209,12 +225,7 @@ public class MainActivity extends AppCompatActivity
         uriBuilder.appendQueryParameter("section", section);
         uriBuilder.appendQueryParameter("format", "json");
         uriBuilder.appendQueryParameter("order-by", "newest");
-
-        // Set the value for "from-date" to last week (today - 7 days) by detault.
-//        String pastDate = addDaysToCurrentDate(DAYS);
-//        uriBuilder.appendQueryParameter("from-date", pastDate);
-
-        uriBuilder.appendQueryParameter("page-size", "10");
+        uriBuilder.appendQueryParameter("page-size", maxResults);
         uriBuilder.appendQueryParameter("show-fields", "thumbnail");
         uriBuilder.appendQueryParameter("api-key", "test");
 
