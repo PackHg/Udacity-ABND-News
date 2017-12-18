@@ -60,12 +60,13 @@ public final class TheGuardian {
      * @return {@link ArrayList<News>} or null if the JSON string is null or emptu.
      */
     private static ArrayList<News> extractNewsfromJsonString(String jsonString) {
+        final String EMPTY_STRING ="";
 
         if (jsonString == null || jsonString.isEmpty()) {
             return null;
         }
 
-        // Keys for parsing
+        // Keys for parsing.
         final String RESPONSE = "response";
         final String RESULTS = "results";
         final String PUBLICATION_DATE = "webPublicationDate";
@@ -79,34 +80,49 @@ public final class TheGuardian {
 
         try {
             JSONObject base = new JSONObject(jsonString);
-            JSONObject response = base.getJSONObject(RESPONSE);
 
-            JSONArray results = response.getJSONArray(RESULTS);
+            JSONObject response = base.optJSONObject(RESPONSE);
+            if (response == null) {
+                return null;
+            }
+
+            JSONArray results = response.optJSONArray(RESULTS);
+            if (results == null) {
+                return null;
+            }
+
             for (int i = 0; i < results.length(); i++) {
-                String date = results.getJSONObject(i).getString(PUBLICATION_DATE);
-                String title = results.getJSONObject(i).getString(TITLE);
-                String section = results.getJSONObject(i).getString(SECTION_NAME);
-                String url = results.getJSONObject(i).getString(URL);
+                String date = results.optJSONObject(i).optString(PUBLICATION_DATE, EMPTY_STRING);
+                String title = results.optJSONObject(i).optString(TITLE, EMPTY_STRING);
+                String section = results.optJSONObject(i).optString(SECTION_NAME, EMPTY_STRING);
+                String url = results.optJSONObject(i).optString(URL, EMPTY_STRING);
 
-                JSONObject fields;
-                String thumbnailUrl = null;
+                String thumbnailUrl;
                 Bitmap thumbnailImage = null;
-                try {
-                    fields = results.getJSONObject(i).getJSONObject(FIELDS);
-                    thumbnailUrl = fields.getString(THUMBNAIL_URL);
-                } catch (JSONException e) {
-                    if (e.getMessage().contains("No value for fields")) {
-                        thumbnailUrl = "";
-                    } else {
-                        Log.e(LOG_TAG, "Problem in parsing the JSON string", e);
-                    }
-                } finally {
-                    if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
+
+                JSONObject fields = results.optJSONObject(i).optJSONObject(FIELDS);
+                if (fields != null) {
+                    thumbnailUrl = fields.optString(THUMBNAIL_URL, EMPTY_STRING);
+                    if (!thumbnailUrl.isEmpty()) {
                         thumbnailImage = getBitmapFromURL(thumbnailUrl);
                     }
                 }
 
-                // TODO: to update.
+//                try {
+//                    fields = results.getJSONObject(i).getJSONObject(FIELDS);
+//                    thumbnailUrl = fields.getString(THUMBNAIL_URL);
+//                } catch (JSONException e) {
+//                    if (e.getMessage().contains("No value for fields")) {
+//                        thumbnailUrl = "";
+//                    } else {
+//                        Log.e(LOG_TAG, "Problem in parsing the JSON string", e);
+//                    }
+//                } finally {
+//                    if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
+//                        thumbnailImage = getBitmapFromURL(thumbnailUrl);
+//                    }
+//                }
+
                 newsArrayList.add(new News(title, date, url, thumbnailImage, section));
             }
         } catch (JSONException e) {
