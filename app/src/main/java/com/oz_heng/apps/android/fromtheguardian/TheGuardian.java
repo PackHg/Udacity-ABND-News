@@ -75,6 +75,7 @@ public final class TheGuardian {
         final String URL = "webUrl";
         final String FIELDS = "fields";
         final String THUMBNAIL_URL = "thumbnail";
+        final String TAGS = "tags";
 
         ArrayList<News> newsArrayList = new ArrayList<News>();
 
@@ -92,38 +93,49 @@ public final class TheGuardian {
             }
 
             for (int i = 0; i < results.length(); i++) {
-                String date = results.optJSONObject(i).optString(PUBLICATION_DATE, EMPTY_STRING);
-                String title = results.optJSONObject(i).optString(TITLE, EMPTY_STRING);
-                String section = results.optJSONObject(i).optString(SECTION_NAME, EMPTY_STRING);
-                String url = results.optJSONObject(i).optString(URL, EMPTY_STRING);
+                JSONObject resultsItem = results.optJSONObject(i);
+                if (resultsItem != null) {
+                    String date = resultsItem.optString(PUBLICATION_DATE, EMPTY_STRING);
+                    String title = resultsItem.optString(TITLE, EMPTY_STRING);
+                    String section = resultsItem.optString(SECTION_NAME, EMPTY_STRING);
+                    String url = resultsItem.optString(URL, EMPTY_STRING);
 
-                String thumbnailUrl;
-                Bitmap thumbnailImage = null;
+                    String thumbnailUrl;
+                    Bitmap thumbnailImage = null;
 
-                JSONObject fields = results.optJSONObject(i).optJSONObject(FIELDS);
-                if (fields != null) {
-                    thumbnailUrl = fields.optString(THUMBNAIL_URL, EMPTY_STRING);
-                    if (!thumbnailUrl.isEmpty()) {
-                        thumbnailImage = getBitmapFromURL(thumbnailUrl);
+                    JSONObject fields = resultsItem.optJSONObject(FIELDS);
+                    if (fields != null) {
+                        thumbnailUrl = fields.optString(THUMBNAIL_URL, EMPTY_STRING);
+                        if (!thumbnailUrl.isEmpty()) {
+                            thumbnailImage = getBitmapFromURL(thumbnailUrl);
+                        }
                     }
+
+                    StringBuilder authors = new StringBuilder();
+                    JSONArray tags = resultsItem.optJSONArray(TAGS);
+                    String author = EMPTY_STRING;
+                    if (tags != null) {
+                        for (int j = 0; j < tags.length(); j++) {
+                            JSONObject tagsItem = tags.optJSONObject(j);
+                            if (tagsItem != null) {
+                                author = tagsItem.optString(TITLE, EMPTY_STRING);
+                                if (!author.isEmpty()) {
+                                    if (j == 0) {
+                                        authors.append(author);
+                                    } else if (j < tags.length() - 1) {
+                                        authors.append(", ");
+                                        authors.append(author);
+                                    } else {
+                                        authors.append(" and ");
+                                        authors.append(author);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    newsArrayList.add(new News(title, authors.toString(), date, url, thumbnailImage, section));
                 }
-
-//                try {
-//                    fields = results.getJSONObject(i).getJSONObject(FIELDS);
-//                    thumbnailUrl = fields.getString(THUMBNAIL_URL);
-//                } catch (JSONException e) {
-//                    if (e.getMessage().contains("No value for fields")) {
-//                        thumbnailUrl = "";
-//                    } else {
-//                        Log.e(LOG_TAG, "Problem in parsing the JSON string", e);
-//                    }
-//                } finally {
-//                    if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
-//                        thumbnailImage = getBitmapFromURL(thumbnailUrl);
-//                    }
-//                }
-
-                newsArrayList.add(new News(title, date, url, thumbnailImage, section));
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem in parsing the JSON string", e);

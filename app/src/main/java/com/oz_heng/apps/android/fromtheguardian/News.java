@@ -7,14 +7,16 @@ import android.graphics.Bitmap;
  */
 public class News {
     private String title;
+    private String authors;
     private String date;
     private String url;
     private Bitmap thumbnailImage;
     private String section;
 
-    public News(String title, String date, String url, Bitmap thumbnailImage,
+    public News(String title, String authors, String date, String url, Bitmap thumbnailImage,
                 String section) {
         this.title = title;
+        this.authors = authors;
         this.date = date;
         this.url = url;
         this.thumbnailImage = thumbnailImage;
@@ -23,6 +25,10 @@ public class News {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getAuthors() {
+        return authors;
     }
 
     public String getDate() {

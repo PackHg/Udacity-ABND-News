@@ -30,7 +30,7 @@ public class NewsApdapter extends ArrayAdapter<News> {
 
     static class ViewHolder {
         public ImageView thumbnail;
-        public TextView title, date, section;
+        public TextView title, authors, date, section;
     }
 
     @NonNull
@@ -47,6 +47,7 @@ public class NewsApdapter extends ArrayAdapter<News> {
             holder = new ViewHolder();
             holder.thumbnail = (ImageView) convertView.findViewById(R.id.thumbnail);
             holder.title = (TextView) convertView.findViewById(R.id.title);
+            holder.authors = (TextView) convertView.findViewById(R.id.authors);
             holder.section = (TextView) convertView.findViewById(R.id.section);
             holder.date = (TextView) convertView.findViewById(R.id.date);
             convertView.setTag(holder);
@@ -59,6 +60,12 @@ public class NewsApdapter extends ArrayAdapter<News> {
                 holder.title.setText(news.getTitle());
             } else {
                 holder.title.setText(R.string.no_title);
+            }
+
+            if (!news.getAuthors().isEmpty()) {
+                holder.authors.setText(news.getAuthors());
+            } else {
+                holder.authors.setText(R.string.no_author);
             }
 
             if (!news.getSection().isEmpty()) {

@@ -38,6 +38,16 @@
             android:textSize="15sp"
             tools:text="Title" />
 
+        <TextView
+            android:id="@+id/authors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            tools:text="Authors" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +61,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/deepOrange300"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 tools:text="Technology" />
 
             <TextView

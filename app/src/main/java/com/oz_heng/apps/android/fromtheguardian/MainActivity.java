@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LoaderManager.LoaderCallbacks<List<News>> {
 
-    /** Keys for querying news sections of the Guardian API  */
+    /** Keys for querying news section of the Guardian API  */
     private static final String SECTION_WORLD = "world";
     private static final String SECTION_AUSTRALIA = "australia-news";
     private static final String SECTION_TECHNOLOGY = "technology";
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
 
     /** Tag used to save user data in SharedPreferences */
     private static final String USER_DATA = "com.oz_heng.apps.android.fromtheguardian.user_data";
-    /** Key for saving the chosen news section */
+    /** Key for saving the chosen section */
     private static final String KEY_USER_SECTION = "user section";
 
     private ListView listView;
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity
             section = sp.getString(KEY_USER_SECTION, section);
         }
 
-        checkNavDrawerMenuItem();
+        setNavDrawerMenuItemChecked();
 
         if (isNetworkConnected(MainActivity.this)) {
             progressBar.setVisibility(View.VISIBLE);
@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity
             progressBar.setVisibility(View.GONE);
             showSnackBar(coordinatorLayout, "No Internet connection.");
         }
-
     }
 
     @Override
@@ -230,7 +229,7 @@ public class MainActivity extends AppCompatActivity
      * Check the corresponding item of NavDrawer's Menu according to
      * section.
      */
-    private void checkNavDrawerMenuItem() {
+    private void setNavDrawerMenuItemChecked() {
         final int MENU_ITEM_SECTION_WORLD = 0;
         final int MENU_ITEM_SECTION_AUSTRALIA = 1;
         final int MENU_ITEM_SECTION_TECHNOLOGY = 2;
@@ -254,10 +253,6 @@ public class MainActivity extends AppCompatActivity
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
         // Base URL for querying The Guardian API.
         final String THE_GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?";
-
-        final String FORMAT_JASON = "json";
-        final String ORDER_BY_NEWEST = "newest";
-        final String SHOW_FIELD_THUMBNAIL = "thumbnail";
         final String API_KEY = "test";
 
         //Get the number of results per query from SharedPreferences.
@@ -269,10 +264,11 @@ public class MainActivity extends AppCompatActivity
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         uriBuilder.appendQueryParameter("section", section);
-        uriBuilder.appendQueryParameter("format", FORMAT_JASON);
-        uriBuilder.appendQueryParameter("order-by", ORDER_BY_NEWEST);
+        uriBuilder.appendQueryParameter("format", "json");
+        uriBuilder.appendQueryParameter("order-by", "newest");
         uriBuilder.appendQueryParameter("page-size", maxResults);
-        uriBuilder.appendQueryParameter("show-fields", SHOW_FIELD_THUMBNAIL);
+        uriBuilder.appendQueryParameter("show-fields", "thumbnail");
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
         uriBuilder.appendQueryParameter("api-key", API_KEY);
 
         // Create a new loader for the given URL
