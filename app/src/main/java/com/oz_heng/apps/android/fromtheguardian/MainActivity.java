@@ -6,6 +6,7 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -58,6 +59,9 @@ public class MainActivity extends AppCompatActivity
 
     /** Loading indicator */
     private View progressBar;
+
+    /** For saving listView state */
+    private Parcelable listViewState;
 
     private CoordinatorLayout coordinatorLayout;
 
@@ -115,7 +119,24 @@ public class MainActivity extends AppCompatActivity
 
         // TODO: checked the corresponding nav section item.
 
-        loadNewsData();
+        if (isNetworkConnected(MainActivity.this)) {
+            progressBar.setVisibility(View.VISIBLE);
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
+
+        } else {
+            progressBar.setVisibility(View.GONE);
+            showSnackBar(coordinatorLayout, "No Internet connection.");
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Save listView state, including scroll position.
+        listViewState = listView.onSaveInstanceState();
     }
 
     @Override
@@ -130,18 +151,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Get a loader to load news data.
+     * Get a loader to reload news data.
      */
-    private void loadNewsData() {
+    private void reloadNewsData() {
         if (isNetworkConnected(MainActivity.this)) {
             progressBar.setVisibility(View.VISIBLE);
 
             LoaderManager loaderManager = getLoaderManager();
-            if (loaderManager.getLoader(NEWS_LOADER_ID) == null) {
-                loaderManager.initLoader(NEWS_LOADER_ID, null, this);
-            } else {
-                loaderManager.restartLoader(NEWS_LOADER_ID, null, this);
-            }
+            loaderManager.restartLoader(NEWS_LOADER_ID, null, this);
         } else {
             progressBar.setVisibility(View.GONE);
             showSnackBar(coordinatorLayout, "No Internet connection.");
@@ -176,7 +193,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_refresh) {
             showSnackBar(coordinatorLayout, "Refresh");
             newsApdapter.clear();
-            loadNewsData();
+            reloadNewsData();
             return true;
         }
         if (id == R.id.action_settings) {
@@ -208,7 +225,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-        loadNewsData();
+        reloadNewsData();
         return true;
     }
 
@@ -244,6 +261,11 @@ public class MainActivity extends AppCompatActivity
             newsApdapter.addAll(newsList);
         } else {
             showSnackBar(coordinatorLayout, "Now news data found.");
+        }
+
+        // Restore previous listView state.
+        if (listViewState != null) {
+            listView.onRestoreInstanceState(listViewState);
         }
     }
 
