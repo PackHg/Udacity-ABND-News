@@ -31,9 +31,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LoaderManager.LoaderCallbacks<List<News>> {
 
-    /** Base URL for querying The Guardian API */
-    private static final String THE_GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?";
-
     /** Keys for querying news sections of the Guardian API  */
     private static final String SECTION_WORLD = "world";
     private static final String SECTION_AUSTRALIA = "australia-news";
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     private static final String SECTION_SCIENCE = "science";
     private static final String SECTION_SPORT = "sport";
 
-    /** current news section */
+    /** Current news section */
     private String section = SECTION_WORLD;
 
     /** Constant value for the news loader ID */
@@ -52,8 +49,6 @@ public class MainActivity extends AppCompatActivity
     /** Key for saving the chosen news section */
     private static final String KEY_USER_SECTION = "user section";
 
-
-    private List<News> newsList = new ArrayList<News>();
     private ListView listView;
     private NewsApdapter newsApdapter;
 
@@ -62,6 +57,8 @@ public class MainActivity extends AppCompatActivity
 
     /** For saving listView state */
     private Parcelable listViewState;
+
+    private NavigationView navigationView;
 
     private CoordinatorLayout coordinatorLayout;
 
@@ -79,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
@@ -117,7 +114,7 @@ public class MainActivity extends AppCompatActivity
             section = sp.getString(KEY_USER_SECTION, section);
         }
 
-        // TODO: checked the corresponding nav section item.
+        checkNavDrawerMenuItem();
 
         if (isNetworkConnected(MainActivity.this)) {
             progressBar.setVisibility(View.VISIBLE);
@@ -229,8 +226,39 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Check the corresponding item of NavDrawer's Menu according to
+     * section.
+     */
+    private void checkNavDrawerMenuItem() {
+        final int MENU_ITEM_SECTION_WORLD = 0;
+        final int MENU_ITEM_SECTION_AUSTRALIA = 1;
+        final int MENU_ITEM_SECTION_TECHNOLOGY = 2;
+        final int MENU_ITEM_SECTION_SCIENCE = 3;
+        final int MENU_ITEM_SECTION_SPORT = 4;
+
+        if (section.equals(SECTION_WORLD)) {
+            navigationView.getMenu().getItem(MENU_ITEM_SECTION_WORLD).setChecked(true);
+        } else if (section.equals(SECTION_AUSTRALIA)) {
+            navigationView.getMenu().getItem(MENU_ITEM_SECTION_AUSTRALIA).setChecked(true);
+        } else if (section.equals(SECTION_TECHNOLOGY)) {
+            navigationView.getMenu().getItem(MENU_ITEM_SECTION_TECHNOLOGY).setChecked(true);
+        } else if (section.equals(SECTION_SCIENCE)) {
+            navigationView.getMenu().getItem(MENU_ITEM_SECTION_SCIENCE).setChecked(true);
+        } else if (section.equals(SECTION_SPORT)) {
+            navigationView.getMenu().getItem(MENU_ITEM_SECTION_SPORT).setChecked(true);
+        }
+    }
+
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
+        // Base URL for querying The Guardian API.
+        final String THE_GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?";
+
+        final String FORMAT_JASON = "json";
+        final String ORDER_BY_NEWEST = "newest";
+        final String SHOW_FIELD_THUMBNAIL = "thumbnail";
+        final String API_KEY = "test";
 
         //Get the number of results per query from SharedPreferences.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -241,11 +269,11 @@ public class MainActivity extends AppCompatActivity
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         uriBuilder.appendQueryParameter("section", section);
-        uriBuilder.appendQueryParameter("format", "json");
-        uriBuilder.appendQueryParameter("order-by", "newest");
+        uriBuilder.appendQueryParameter("format", FORMAT_JASON);
+        uriBuilder.appendQueryParameter("order-by", ORDER_BY_NEWEST);
         uriBuilder.appendQueryParameter("page-size", maxResults);
-        uriBuilder.appendQueryParameter("show-fields", "thumbnail");
-        uriBuilder.appendQueryParameter("api-key", "test");
+        uriBuilder.appendQueryParameter("show-fields", SHOW_FIELD_THUMBNAIL);
+        uriBuilder.appendQueryParameter("api-key", API_KEY);
 
         // Create a new loader for the given URL
         return new NewsLoader(this, uriBuilder.toString());
