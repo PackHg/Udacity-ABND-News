@@ -1,4 +1,4 @@
-# Book Search
+# News App
 This is my app for the **(v1) News App** project. It's part of the Udacity Android Basics Nanodegree.
 
 ## What is it about?
