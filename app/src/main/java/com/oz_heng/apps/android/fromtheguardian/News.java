@@ -3,9 +3,9 @@ package com.oz_heng.apps.android.fromtheguardian;
 import android.graphics.Bitmap;
 
 /**
- * {@link News} class consisting of data we're interested in.
+ * {@link News} class consisting of news data we're interested in.
  */
-public class News {
+class News {
     private String title;
     private String authors;
     private String date;
@@ -13,7 +13,7 @@ public class News {
     private Bitmap thumbnailImage;
     private String section;
 
-    public News(String title, String authors, String date, String url, Bitmap thumbnailImage,
+    News(String title, String authors, String date, String url, Bitmap thumbnailImage,
                 String section) {
         this.title = title;
         this.authors = authors;
@@ -23,27 +23,27 @@ public class News {
         this.section = section;
     }
 
-    public String getTitle() {
+    String getTitle() {
         return title;
     }
 
-    public String getAuthors() {
+    String getAuthors() {
         return authors;
     }
 
-    public String getDate() {
+    String getDate() {
         return date;
     }
 
-    public String getUrl() {
+    String getUrl() {
         return url;
     }
 
-    public Bitmap getThumbnailBitmap() {
+    Bitmap getThumbnailBitmap() {
         return thumbnailImage;
     }
 
-    public String getSection() {
+    String getSection() {
         return section;
     }
 }

@@ -27,8 +27,8 @@ public final class FetchRemoteData {
     /**
      * Check the network connectivity.
      *
-     * @param context the context of the activity
-     * @return true if there's a network connection
+     * @param context the Activity context.
+     * @return true if there's a network connection.
      */
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.
@@ -42,7 +42,7 @@ public final class FetchRemoteData {
 
     /**
      * Load an image from a given URL and turn it into a Bitmap.
-     * Return null if there's issue in getting the {@link Bitmap} or the src is empty.
+     * Return null if there's issue in getting the {@link Bitmap} or the srcUrl is empty.
      *
      * @param srcUrl Image source Url (a String).
      * @return Image Bitmap.
@@ -82,10 +82,10 @@ public final class FetchRemoteData {
     }
 
     /**
-     * Create an URL from the the given URL string.
+     * Create an {@link URL} object from the the given URL string.
      *
      * @param urlString String containing the URL.
-     * @return an URL.
+     * @return an URL object.
      */
     public static URL createUrl(String urlString) {
         URL url = null;

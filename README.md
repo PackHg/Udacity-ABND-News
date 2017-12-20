@@ -1,22 +1,24 @@
 # Book Search
-This is my **Book Listing App**. It's a project of [Android Basics Nanodegree](https://www.udacity.com/course/android-basics-nanodegree-by-google--nd803).
+This is my app for the **(v1) News App** project. It's part of the Udacity Android Basics Nanodegree.
 
 ## What is it about?
-* Upon keywords entered by the user, this app searches for book data by making use of Google Books API.
-* The search results are listed in a ListView.
-* A click on a list item will open a webpage that provides more details on the book.
-* In the Settings menu, the user can change the maximum number of search results. It's 10 by default and maximum 40.
+This app fetches news data from The Guardian API.
+* It uses the "test" API key.
+* In the menu of the Navigation Drawer at the left, the user can select the section: either World, Australia, Technology, Science or Sport.
+* In the right upper corner, there is a menu allowing the user to refresh the list of news or enter the maximum number of results to be fetched.
 
 ## IDE
 * Android Studio 3.0.1
 
 ## Tested with
-* Hardware devices: Samsung SM-G935F (Android 7.0, API 24), LGE Nexus 5 (Android 6.0.1, API 23)
+* Hardware devices: Samsung SM-G935F (Android 7.0, API 24), LGE Nexus 5 (Android 6.0.1, API 23).
 
 ## Screenshots
-<img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-BookSearch/master/screenshots/screen01.png" width="300"> <img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-BookSearch/master/screenshots/screen02.png" width="600">
-<img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-BookSearch/master/screenshots/screen03.png" width="300"> <img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-BookSearch/master/screenshots/screen04.png" width="300">
-<img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-BookSearch/master/screenshots/screen05.png" width="300"> <img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-BookSearch/master/screenshots/screen06.png" width="300">
+<img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-News/master/screenshots/screen01.png" width="300"> <img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-News/master/screenshots/screen02land.png" width="600">
+<img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-News/master/screenshots/screen03.png" width="300"> <img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-News/master/screenshots/screen04.png" width="300">
+<img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-News/master/screenshots/screen05.png" width="300"> <img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-News/master/screenshots/screen06.png" width="300">
+<img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-News/master/screenshots/screen07.png" width="300">
+
 
 This app is for educational purpose and learning Android development.
 

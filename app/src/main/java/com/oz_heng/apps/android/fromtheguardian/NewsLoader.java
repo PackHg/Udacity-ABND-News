@@ -9,8 +9,7 @@ import static com.oz_heng.apps.android.fromtheguardian.TheGuardian.fetchNewsData
 
 
 /**
- * Loads a list of News by using an AsyncTaskLoader to perform the
- * network request to the given URL.
+ * Loads a list of News.
  */
 public class NewsLoader extends AsyncTaskLoader<List<News>> {
 
@@ -22,13 +21,13 @@ public class NewsLoader extends AsyncTaskLoader<List<News>> {
      * @param context Context of the activity.
      * @param url To load the data from.
      */
-    public NewsLoader(Context context, String url) {
+    NewsLoader(Context context, String url) {
         super(context);
         this.url = url;
     }
 
     /**
-     * Is called in a backaground thread to fetch news data from The Guardian server
+     * Is called in a background thread to fetch news data from The Guardian server.
      * @return List of News, null if url is an empty String.
      */
     @Override

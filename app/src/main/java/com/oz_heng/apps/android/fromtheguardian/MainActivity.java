@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     private static final String KEY_USER_SECTION = "user section";
 
     private ListView listView;
-    private NewsApdapter newsApdapter;
+    private NewsAdapter newsAdapter;
 
     /** Loading indicator */
     private View progressBar;
@@ -83,18 +83,18 @@ public class MainActivity extends AppCompatActivity
 
          // Setup listView.
         listView = (ListView) findViewById(R.id.list_view);
-        newsApdapter = new NewsApdapter(this, new ArrayList<News>());
-        listView.setAdapter(newsApdapter);
+        newsAdapter = new NewsAdapter(this, new ArrayList<News>());
+        listView.setAdapter(newsAdapter);
 
         progressBar = (View) findViewById(R.id.loading_spinner);
         progressBar.setVisibility(View.GONE);
 
-        // setOnItemClickListener to open the Web link correspoding to the list
+        // setOnItemClickListener to open the Web link corresponding to the list
         // item the user has clicked on.
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                News news = newsApdapter.getItem(i);
+                News news = newsAdapter.getItem(i);
                 if (news != null) {
                     if (!news.getUrl().isEmpty()) {
                         Intent intent = new Intent(Intent.ACTION_VIEW,
@@ -187,8 +187,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            showSnackBar(coordinatorLayout, "Refresh");
-            newsApdapter.clear();
+            newsAdapter.clear();
             reloadNewsData();
             return true;
         }
@@ -279,10 +278,10 @@ public class MainActivity extends AppCompatActivity
     public void onLoadFinished(Loader<List<News>> loader, List<News> newsList) {
 
         progressBar.setVisibility(View.GONE);
-        newsApdapter.clear();
+        newsAdapter.clear();
 
         if (newsList != null && !newsList.isEmpty()) {
-            newsApdapter.addAll(newsList);
+            newsAdapter.addAll(newsList);
         } else {
             showSnackBar(coordinatorLayout, "Now news data found.");
         }
@@ -295,6 +294,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onLoaderReset(Loader<List<News>> loader) {
-        newsApdapter.clear();
+        newsAdapter.clear();
     }
 }

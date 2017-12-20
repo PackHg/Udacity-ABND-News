@@ -39,12 +39,10 @@ public class SettingsActivity extends AppCompatActivity {
             String stringValue = o.toString();
             Integer maxResults = Integer.parseInt(stringValue);
             if (maxResults < MIN_RESULTS) {
-//                showToast(getActivity(), getString(R.string.min_nbr_results));
                 showSnackBar(getView(), getString(R.string.min_nbr_results));
                 return false;
             }
             if (maxResults > MAX_RESULTS) {
-//                showToast(getActivity(), getString(R.string.max_nbr_results));
                 showSnackBar(getView(), getString(R.string.max_nbr_results));
                 return false;
             }

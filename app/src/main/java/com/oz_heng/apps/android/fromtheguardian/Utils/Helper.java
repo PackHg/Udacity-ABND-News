@@ -22,7 +22,7 @@ public final class Helper {
     }
 
     /**
-     * Show {@link Snackbar} with the text parameter.
+     * Show a {@link Snackbar} with the text parameter.
      * @param view Contextual view.
      * @param text Text to be displayed.
      */

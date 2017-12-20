@@ -19,18 +19,18 @@ import static com.oz_heng.apps.android.fromtheguardian.Utils.DateAndTime.stringT
 
 
 /**
- * {@link NewsApdapter} provides the layout for each list News item based on a data
+ * {@link NewsAdapter} provides the layout for each list News item based on a data
  * source.
  */
-public class NewsApdapter extends ArrayAdapter<News> {
+public class NewsAdapter extends ArrayAdapter<News> {
 
-    public NewsApdapter(@NonNull Context context, @NonNull ArrayList<News>newsList) {
+    NewsAdapter(@NonNull Context context, @NonNull ArrayList<News>newsList) {
         super(context, 0, newsList);
     }
 
     static class ViewHolder {
-        public ImageView thumbnail;
-        public TextView title, authors, date, section;
+        ImageView thumbnail;
+        TextView title, authors, date, section;
     }
 
     @NonNull

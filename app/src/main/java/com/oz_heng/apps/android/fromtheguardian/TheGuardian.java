@@ -17,9 +17,9 @@ import static com.oz_heng.apps.android.fromtheguardian.Utils.FetchRemoteData.get
 import static com.oz_heng.apps.android.fromtheguardian.Utils.FetchRemoteData.makeHttpRequest;
 
 /**
- * Helper class with method to fetch data from the Guardian API.
+ * Helper class with methods to fetch and parse data from the Guardian API.
  */
-public final class TheGuardian {
+final class TheGuardian {
     private static final String LOG_TAG = TheGuardian.class.getSimpleName();
 
     private TheGuardian() {}
@@ -31,7 +31,7 @@ public final class TheGuardian {
      * @param urlString String containing the URL.
      * @return List of News data or null.
      */
-    public static List<News> fetchNewsData(String urlString) {
+    static List<News> fetchNewsData(String urlString) {
 
         if (urlString.isEmpty()) {
             return null;
@@ -40,7 +40,7 @@ public final class TheGuardian {
         // Create URL object
         URL url = createUrl(urlString);
 
-        // Perform HTTP request to the URL and receive a JSON response back
+        // Perform HTTP request to the URL and receive a JSON response.
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(url);
@@ -48,7 +48,7 @@ public final class TheGuardian {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        //  Return the list of {@link Earthquake}s extracted from the JSON response
+        //  Return the list of News extracted from the JSON response.
         return extractNewsfromJsonString(jsonResponse);
     }
 
@@ -56,8 +56,8 @@ public final class TheGuardian {
      * Return an {@link ArrayList<News>} from a JSON string obtained from
      * the Guardian API.
      *
-     * @param jsonString    a JSON string.
-     * @return {@link ArrayList<News>} or null if the JSON string is null or emptu.
+     * @param jsonString a JSON string.
+     * @return {@link ArrayList<News>} or null if the JSON string is null or empty.
      */
     private static ArrayList<News> extractNewsfromJsonString(String jsonString) {
         final String EMPTY_STRING ="";
@@ -113,7 +113,7 @@ public final class TheGuardian {
 
                     StringBuilder authors = new StringBuilder();
                     JSONArray tags = resultsItem.optJSONArray(TAGS);
-                    String author = EMPTY_STRING;
+                    String author;
                     if (tags != null) {
                         for (int j = 0; j < tags.length(); j++) {
                             JSONObject tagsItem = tags.optJSONObject(j);
