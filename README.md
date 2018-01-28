@@ -13,7 +13,7 @@ This app fetches news data from The Guardian API.
 * On the menu of the Navigation Drawer at the left, the user can select the section: either World, Australia, Technology, Science or Sport.
 * On the right upper corner, there is a menu allowing the user to refresh the list of news or enter the maximum number of results to be fetched.
 
-##Keywords
+## Keywords
 Android app development, Java, Connecting to Guardian API, Parsing JSON response from API, NavigationView, LoaderManager.
 
 ## IDE
@@ -21,6 +21,7 @@ Android app development, Java, Connecting to Guardian API, Parsing JSON response
 
 ## Tested with
 * Hardware devices: Samsung SM-G935F (Android 7.0, API 24), LGE Nexus 5 (Android 6.0.1, API 23).
+
 
 This app is for educational purpose and learning Android development.
 
