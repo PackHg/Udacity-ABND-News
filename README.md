@@ -8,9 +8,9 @@ This is my app for the **News App (v1)** project. It's part of the Udacity Andro
 <img src="https://raw.githubusercontent.com/PackHg/Udacity-ABND-News/master/screenshots/screen07.png" width="300">
 
 ## What is it about?
-This app fetches news data from The Guardian API.
+This app fetches and parses news data from The Guardian API.
 * It uses the "test" API key.
-* On the menu of the Navigation Drawer at the left, the user can select the section: either World, Australia, Technology, Science or Sport.
+* On the menu of the Navigation Drawer at the left, the user can select one of the following sections: either World, Australia, Technology, Science or Sport.
 * On the right upper corner, there is a menu allowing the user to refresh the list of news or enter the maximum number of results to be fetched.
 
 ## Keywords
